@@ -1,0 +1,26 @@
+{
+  "name": "poizon-vk-gamebot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Petr Mitin tg @petr09mitin",
+  "license": "ISC",
+  "dependencies": {
+    "@vk-io/hear": "^1.1.0",
+    "@vk-io/scenes": "^1.2.0",
+    "@vk-io/session": "^2.2.0",
+    "dotenv": "^16.0.3",
+    "pg": "^8.8.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.26.0",
+    "vk-io": "^4.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
