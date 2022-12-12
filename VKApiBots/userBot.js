@@ -5,7 +5,7 @@ const keyService = require('../services/keyService')
 const userBot = new HearManager()
 
 userBot.hear('пойз', async (context) => {
-    if (message.isOutbox) return
+    if (context.isOutbox) return
     await keyService.addToUserKeys(context.senderId, 'common', 30)
     await keyService.addToUserKeys(context.senderId, 'epic', 30)
     await keyService.addToUserKeys(context.senderId, 'legendary', 30)
