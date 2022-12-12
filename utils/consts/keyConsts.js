@@ -1,15 +1,35 @@
 const keyRewards = {
     common: [{
-        reward: 'name1',
-        chance: 0.1
+        reward: 'Скидка 3%',
+        chance: 20
+    },
+    {
+        reward: 'Бесплатная доставка',
+        chance: 20
+    },
+    {
+        reward: 'Эпический ключ',
+        chance: 20
     }],
     epic: [{
-        reward: 'name2',
-        chance: 0.1
+        reward: 'Любой товар до 200 Юань (¥)',
+        chance: 20
+    },
+    {
+        reward: 'Скидка 7%',
+        chance: 20
+    },
+    {
+        reward: 'Легендарный ключ',
+        chance: 20
     }],
     legendary: [{
-        reward: 'name3',
-        chance: 0.1
+        reward: 'Скидка 10%',
+        chance: 20
+    },
+    {
+        reward: 'Любой товар до 500 Юань (¥)',
+        chance: 20
     }]
 }
 

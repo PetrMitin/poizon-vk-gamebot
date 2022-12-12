@@ -10,6 +10,12 @@ const User = sequelize.define('user', {
     legendaryKeysAmount: {type: DataTypes.INTEGER, defaultValue: 0},
 }, {hooks: true})
 
+const Promocode = sequelize.define('promocode', {
+    text: {type: DataTypes.STRING, primaryKey: true},
+    isActivated: {type: DataTypes.BOOLEAN, defaultValue: false}
+})
+
 module.exports = {
-    User
+    User,
+    Promocode
 }

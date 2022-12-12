@@ -1,17 +1,32 @@
 const {HearManager} = require('@vk-io/hear')
-const {User} = require('../db/models')
-const UserService = require('../services/userService')
+const startKeyboard = require('../keyboards/userKeyboards/startKeyboard')
+const keyService = require('../services/keyService')
 
 const userBot = new HearManager()
 
-userBot.hear(new RegExp(''), async (context) => {
-    const senderId = context.senderId
-    const oldUser = await User.findByPk(senderId)
-    if (oldUser) {
-        await UserService.incrementUserMessages(senderId)
-    } else {
-        await UserService.addUser(senderId, 'user')
-    }
+userBot.hear('пойз', async (context) => {
+    await keyService.addToUserKeys(context.senderId, 'common', 30)
+    await keyService.addToUserKeys(context.senderId, 'epic', 30)
+    await keyService.addToUserKeys(context.senderId, 'legendary', 30)
+    return context.send(`Приветствуем! Чтобы использовать игрового бота, откройте клавиатуру (квадрат с 4 точками справа от смайликов)`, {
+        keyboard: startKeyboard
+    })
+})
+
+userBot.hear(new RegExp('Мои ключи'), async (context) => {
+    return await context.scene.enter('list-keys')
+})
+
+userBot.hear(new RegExp('Крутить ключ'), async (context) => {
+    return await context.scene.enter('spin-keys')
+})
+
+userBot.hear(new RegExp('Обменять ключи на более редкие'), async (context) => {
+    return await context.scene.enter('exchange-keys')
+})
+
+userBot.hear(new RegExp('Активировать промокод'), async (context) => {
+    return await context.scene.enter('activate-promocode')
 })
 
 module.exports = userBot
