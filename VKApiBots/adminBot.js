@@ -1,6 +1,7 @@
 const {HearManager} = require('@vk-io/hear')
 const adminPannelKeyboard = require('../keyboards/adminKeyboards/adminPannelKeyboard')
 const adminsPannelKeyboard = require('../keyboards/adminKeyboards/adminsPannelKeyboard')
+const keysPannelKeyboard = require('../keyboards/adminKeyboards/keysPannelKeyboard')
 const promocodesPannelKeyboard = require('../keyboards/adminKeyboards/promocodesPannelKeyboard')
 
 const adminBot = new HearManager()
@@ -27,6 +28,18 @@ adminBot.hear(new RegExp('Добавить промокод'), async (context) =
 adminBot.hear(new RegExp('Удалить промокод'), async (context) => {
     if (context.isOutbox) return
     return context.scene.enter('delete-promocode')
+})
+
+adminBot.hear(new RegExp('Ключи'), async (context) => {
+    if (context.isOutbox) return
+    return context.send('Чё надо по ключам?', {
+        keyboard: keysPannelKeyboard
+    })
+})
+
+adminBot.hear(new RegExp('Добавить ключи пользователю'), async (context) => {
+    if (context.isOutbox) return
+    return context.scene.enter('add-keys-to-user')
 })
 
 adminBot.hear(new RegExp('Админы'), async (context) => {

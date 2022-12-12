@@ -1,5 +1,7 @@
 const { StepScene } = require("@vk-io/scenes");
+const { keysSelectKeyboard } = require("../keyboards/userKeyboards/keysSelectKeyboard");
 const adminService = require("../services/adminService");
+const keyService = require("../services/keyService");
 const promocodeService = require("../services/promocodeService");
 
 const addPromocodeScene = new StepScene('add-promocode', [
@@ -51,6 +53,51 @@ const deletePromocodeScene = new StepScene('delete-promocode', [
             await context.send('Произошла непредвиденная ошибка...')
         } else {
             await context.send('Поздравляем, промокод был удален!')
+        }
+        return context.scene.leave()
+    }
+])
+
+const addKeysToUserScene = new StepScene('add-keys-to-user', [
+    async (context) => {
+        if (context.scene.step.firstTime || !context.text) {
+            return context.send('Введите id пользователя, которому нужно добавить ключи')
+        } else if (!context.scene.step.firstTime && (!context.text || context.isOutbox)) {
+            return
+        }
+        context.scene.state.userId = context.text
+        return context.scene.step.next()
+    },
+    async (context) => {
+        if (context.scene.step.firstTime || !context.text) {
+            return context.send('Какой тип ключа нужно добавить?', {
+                keyboard: keysSelectKeyboard
+            })
+        } else if (!context.scene.step.firstTime && (!context.text || context.isOutbox)) {
+            return
+        }
+        context.scene.state.keyTier = context.messagePayload.command
+        return context.scene.step.next()
+    },
+    async (context) => {
+        if (context.scene.step.firstTime || !context.text) {
+            return context.send('Сколько таких ключей нужно добавить?')
+        } else if (!context.scene.step.firstTime && (!context.text || context.isOutbox)) {
+            return
+        }
+        context.scene.state.numberOfKeys = parseInt(context.text)
+        return context.scene.step.next()
+    },
+    async (context) => {
+        if (!context.scene.step.firstTime && (!context.text || context.isOutbox)) {
+            return
+        }
+        const {userId, keyTier, numberOfKeys} = context.scene.state
+        const result = await keyService.addToUserKeys(userId, keyTier, numberOfKeys)
+        if (result) {
+            await context.send('Ключи успешно добавлены!')
+        } else {
+            await context.send('Что-то пошло не так...')
         }
         return context.scene.leave()
     }
@@ -108,6 +155,6 @@ const deleteAdminScene = new StepScene('delete-admin', [
     }
 ])
 
-const adminScenes = [addPromocodeScene, deletePromocodeScene, addAdminScene, deleteAdminScene]
+const adminScenes = [addPromocodeScene, deletePromocodeScene, addKeysToUserScene, addAdminScene, deleteAdminScene]
 
 module.exports = adminScenes

@@ -10,15 +10,15 @@ class KeyService {
                 case 'common':
                     return (await User.update({
                         commonKeysAmount: oldUser.dataValues.commonKeysAmount + keyAmount
-                    }, {where: {id: oldUser.dataValues.id}, returning: true}))[1].dataValues
+                    }, {where: {id: oldUser.dataValues.id}, returning: true}))
                 case 'epic': 
                     return (await User.update({
                         epicKeysAmount: oldUser.dataValues.epicKeysAmount + keyAmount
-                    }, {where: {id: oldUser.dataValues.id}, returning: true}))[1].dataValues
+                    }, {where: {id: oldUser.dataValues.id}, returning: true}))
                 case 'legendary':
                     return (await User.update({
                         legendaryKeysAmount: oldUser.dataValues.legendaryKeysAmount + keyAmount
-                    }, {where: {id: oldUser.dataValues.id}, returning: true}))[1].dataValues
+                    }, {where: {id: oldUser.dataValues.id}, returning: true}))
                 default:
                     return null
             }

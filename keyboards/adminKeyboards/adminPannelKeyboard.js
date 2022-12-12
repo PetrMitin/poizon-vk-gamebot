@@ -9,6 +9,13 @@ const adminPannelKeyboard = Keyboard.builder()
         }
     }).row()
     .textButton({
+        label: 'Ключи',
+        color: Keyboard.PRIMARY_COLOR,
+        payload: {
+            command: '/keys'
+        }
+    }).row()
+    .textButton({
         label: 'Админы',
         color: Keyboard.PRIMARY_COLOR,
         payload: {
