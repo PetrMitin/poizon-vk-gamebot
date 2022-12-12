@@ -43,7 +43,6 @@ class KeyService {
             const oldUser = await User.findByPk(userId)
             if (!oldUser) throw new Error('User to exchange keys not found')
             const {commonKeysAmount, epicKeysAmount, legendaryKeysAmount} = oldUser.dataValues
-            console.log(commonKeysAmount, epicKeysAmount, legendaryKeysAmount, 'exchange');
             if (keyTier === 'common') {
                 if (commonKeysAmount < 12) return null
                 await User.update({commonKeysAmount: commonKeysAmount - 12, epicKeysAmount: epicKeysAmount + 1}, {where: {id: oldUser.dataValues.id}})
@@ -67,7 +66,6 @@ class KeyService {
             const {commonKeysAmount, epicKeysAmount, legendaryKeysAmount} = oldUser.dataValues
             let currSpinnedPercent = 0
             const random = Math.random() * 100
-            console.log(keyTier, random);
             if (keyTier === 'common') {
                 if (!commonKeysAmount) return {reward: 'У вас нет обычных ключей!'}
                 await User.update({commonKeysAmount: commonKeysAmount - 1}, {where: {id: oldUser.dataValues.id}})
