@@ -5,8 +5,12 @@ const promocodeService = require("../services/promocodeService");
 
 const listKeysScene = new StepScene('list-keys', [
     async (context) => {
-        const {commonKeysAmount, epicKeysAmount, legendaryKeysAmount} = await keyService.listUserKeys(context.senderId, 'common')
-        await context.send(`Обычных ключей: ${commonKeysAmount} шт. \nЭпических ключей: ${epicKeysAmount} шт. \nЛегендарных ключей: ${legendaryKeysAmount} шт.`)
+        if (context.scene.step.firstTime) {
+            const {commonKeysAmount, epicKeysAmount, legendaryKeysAmount} = await keyService.listUserKeys(context.senderId, 'common')
+            await context.send(`Обычных ключей: ${commonKeysAmount} шт. \nЭпических ключей: ${epicKeysAmount} шт. \nЛегендарных ключей: ${legendaryKeysAmount} шт.`)
+        } else if (!context.scene.step.firstTime && (!context.text || context.isOutbox)) {
+            return
+        }
         return context.scene.leave()
     }
 ])
