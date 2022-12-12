@@ -21,7 +21,7 @@ const spinKeysScene = new StepScene('spin-keys', [
             return
         }
         context.scene.state.keyTier = context.messagePayload.command
-        return context.scene.step.next()
+        return await context.scene.step.next()
     }, 
     async (context) => {
         if (!context.scene.step.firstTime || context.scene.state.isSpinned) return
@@ -59,7 +59,7 @@ const exchangeKeysScene = new StepScene('exchange-keys', [
             return
         }
         context.scene.state.keyTier = context.messagePayload.command
-        return context.scene.step.next()
+        return await context.scene.step.next()
     },
     async (context) => {
         if (!context.scene.step.firstTime || context.scene.state.isNotFirstTime) return
