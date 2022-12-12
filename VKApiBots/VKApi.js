@@ -21,7 +21,7 @@ setInterval(async () => {
     const currTime = new Date()
     if (currTime.getHours() === 23) {
         const users = (await User.findAll()).map(val => val.dataValues).sort((val1, val2) => val1.amountOfMessages - val2.amountOfMessages)
-        const topThree = users.slice(-1)
+        const topThree = users.slice(-3)
         topThree.forEach(async userData => {
             if (!userData.amountOfMessages) return
             return await KeyService.addToUserKeys(userData.id, 'common', 1)
