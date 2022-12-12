@@ -15,22 +15,22 @@ userBot.hear('пойз', async (context) => {
 })
 
 userBot.hear(new RegExp('Мои ключи'), async (context) => {
-    if (message.isOutbox) return
+    if (context.isOutbox) return
     return await context.scene.enter('list-keys')
 })
 
 userBot.hear(new RegExp('Крутить ключ'), async (context) => {
-    if (message.isOutbox) return
+    if (context.isOutbox) return
     return await context.scene.enter('spin-keys')
 })
 
 userBot.hear(new RegExp('Обменять ключи на более редкие'), async (context) => {
-    if (message.isOutbox) return
+    if (context.isOutbox) return
     return await context.scene.enter('exchange-keys')
 })
 
 userBot.hear(new RegExp('Активировать промокод'), async (context) => {
-    if (message.isOutbox) return
+    if (context.isOutbox) return
     return await context.scene.enter('activate-promocode')
 })
 
