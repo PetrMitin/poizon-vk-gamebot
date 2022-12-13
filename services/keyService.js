@@ -1,11 +1,12 @@
 const {User} = require('../db/models')
 const {keyRewards} = require('../utils/consts/keyConsts')
+const userService = require('./userService')
 
 class KeyService {
     addToUserKeys  = async (userId, keyTier, keyAmount) => {
         try {
-            const oldUser = await User.findByPk(userId)
-            if (!oldUser) throw new Error('User to add keys not found')
+            let oldUser = await User.findByPk(userId)
+            if (!oldUser) oldUser = await userService.addUser(userId)
             switch (keyTier) {
                 case 'common':
                     return (await User.update({
