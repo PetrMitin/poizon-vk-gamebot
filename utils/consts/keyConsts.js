@@ -5,7 +5,7 @@ const keyRewards = {
     },
     {
         reward: 'Бесплатная доставка',
-        chance: 5
+        chance: 3
     },
     {
         reward: 'Эпический ключ',
@@ -13,7 +13,7 @@ const keyRewards = {
     }],
     epic: [{
         reward: 'Любой товар до 200 Юань (¥)',
-        chance: 3
+        chance: 1
     },
     {
         reward: 'Скидка 7%',
@@ -25,11 +25,11 @@ const keyRewards = {
     }],
     legendary: [{
         reward: 'Скидка 10%',
-        chance: 10
+        chance: 7
     },
     {
         reward: 'Любой товар до 500 Юань (¥)',
-        chance: 3
+        chance: 1
     }]
 }
 

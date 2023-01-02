@@ -21,18 +21,17 @@ setInterval(async () => {
     const currTime = new Date()
     if (currTime.getHours() === 23) {
         const users = (await User.findAll()).map(val => val.dataValues).sort((val1, val2) => val1.amountOfMessages - val2.amountOfMessages)
-        const topThree = users.slice(-3)
+        const topThree = users.slice(-3).filter(elem => elem.amountOfMessages >= 30)
         topThree.forEach(async userData => {
-            if (!userData.amountOfMessages) return
             return await KeyService.addToUserKeys(userData.id, 'common', 1)
         })
-        const topIds = topThree.filter(elem => elem.amountOfMessages > 0).map(data => data.id)
+        const topIds = topThree.map(data => data.id)
         await User.update({amountOfMessages: 0}, {where: {}})
         if (!topIds.length) return
         return await vkInstance.api.messages.send({
             peer_ids: topIds,
             random_id: 0,
-            message: 'Поздравляем! За актив в беседе вы получаете обычный ключ! \nЧтобы использовать его, напишите в личные сообщения группы команду /start-game'
+            message: 'Поздравляем! За актив в беседе вы получаете обычный ключ! \nЧтобы крутить его, нажмите кнопку "Использовать ключ" на интерактивной клавиатуре в беседе группы'
         })
     }
 }, 60 * 60 * 1000)
