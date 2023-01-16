@@ -1,5 +1,6 @@
 const { StepScene } = require("@vk-io/scenes");
 const { keysSelectKeyboard } = require("../keyboards/userKeyboards/keysSelectKeyboard");
+const yesOrNoKeyboard = require('../keyboards/adminKeyboards/yesOrNoKeyboard')
 const adminService = require("../services/adminService");
 const keyService = require("../services/keyService");
 const promocodeService = require("../services/promocodeService");
@@ -155,6 +156,49 @@ const deleteAdminScene = new StepScene('delete-admin', [
     }
 ])
 
-const adminScenes = [addPromocodeScene, deletePromocodeScene, addKeysToUserScene, addAdminScene, deleteAdminScene]
+const sendNotificationsScene = new StepScene('send-chat-notifications', [
+    async (context) => {
+        console.log(context);
+        if (context.scene.step.firstTime || !context.text) {
+            return context.send('Введи текст рассылки')
+        }  else if (!context.scene.step.firstTime && !context.text) {
+            return
+        }
+        if (context.isOutbox) return
+        const notificationText = context.text
+        const attachments = context.attachments.map(elem => `photo${elem.ownerId}_${elem.id}`)
+        console.log(notificationText, attachments);
+        context.scene.state.notificationText = notificationText
+        context.scene.state.attachments = attachments
+        return context.scene.step.next()
+        
+    }, 
+    async (context) => {
+        if (context.scene.step.firstTime || !context.text) {
+            return context.send('Рассылаем?', {
+                keyboard: yesOrNoKeyboard
+            })
+        }  else if (!context.scene.step.firstTime && !context.text) {
+            return
+        }
+        if (context.isOutbox) return
+        const notificationConfirmation = context.messagePayload.command === '/confirm-send'
+        if (!notificationConfirmation) {
+            await context.send('Отменяем')
+            return await context.scene.leave()
+        }
+        return context.scene.step.next()
+    },
+    async (context) => {
+        if (context.scene.step.firstTime) {
+            const notificationText = context.scene.state.notificationText
+            const attachments = context.scene.state.attachments
+            await adminService.sendChatNotification(notificationText, attachments)
+        }
+        return await context.scene.leave()
+    }
+])
+
+const adminScenes = [addPromocodeScene, deletePromocodeScene, addKeysToUserScene, addAdminScene, deleteAdminScene, sendNotificationsScene]
 
 module.exports = adminScenes

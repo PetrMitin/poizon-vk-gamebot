@@ -16,7 +16,7 @@ const adminPannelKeyboard = Keyboard.builder()
         }
     }).row()
     .textButton({
-        label: 'Уведомление всем пользователям чата',
+        label: 'Уведомление для участников беседы',
         color: Keyboard.PRIMARY_COLOR,
         payload: {
             command: '/notification'

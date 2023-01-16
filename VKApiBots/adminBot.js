@@ -1,4 +1,5 @@
 const {HearManager} = require('@vk-io/hear')
+const adminService = require('../services/adminService')
 const adminPannelKeyboard = require('../keyboards/adminKeyboards/adminPannelKeyboard')
 const adminsPannelKeyboard = require('../keyboards/adminKeyboards/adminsPannelKeyboard')
 const keysPannelKeyboard = require('../keyboards/adminKeyboards/keysPannelKeyboard')
@@ -57,6 +58,14 @@ adminBot.hear(new RegExp('Добавить админа'), async (context) => {
 adminBot.hear(new RegExp('Удалить админа'), async (context) => {
     if (context.isOutbox) return
     return context.scene.enter('delete-admin')
+})
+
+//Send notifications
+
+adminBot.hear(new RegExp('Уведомление для участников беседы'), async (context) => {
+    const isAdmin = await adminService.isAdmin(context.senderId)
+    if (!isAdmin) return
+    return await context.scene.enter('send-chat-notifications')
 })
 
 module.exports = adminBot
