@@ -38,7 +38,7 @@ setInterval(async () => {
 
 vkInstance.updates.on(`message_new`, async (message, next) => {
     if (message.isOutbox) return
-    if (message.peerType === 'user') return next()
+    if (message.peerType !== 'user') return next()
     const senderId = message.senderId
     const oldUser = await User.findByPk(senderId)
     if (oldUser) {
