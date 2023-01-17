@@ -42,14 +42,12 @@ class AdminService {
         }
     }
 
-    async sendChatNotification(text, attachments) {
-        const userIds = (await User.findAll()).map(elem => elem.dataValues.id)
-        const attachmentString = attachments.length ? attachments.join(',') : undefined
+    async sendChatNotification(text) {
+        const userIds = (await User.findAll()).map(elem => parseInt(elem.dataValues.id))
         return await this.vkInstance.api.messages.send({
             peer_ids: userIds,
             random_id: 0,
-            message: text,
-            attachment: attachmentString
+            message: text
         })
     }
 }

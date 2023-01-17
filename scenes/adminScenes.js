@@ -166,10 +166,7 @@ const sendNotificationsScene = new StepScene('send-chat-notifications', [
         }
         if (context.isOutbox) return
         const notificationText = context.text
-        const attachments = context.attachments.map(elem => `photo${elem.ownerId}_${elem.id}`)
-        console.log(notificationText, attachments);
         context.scene.state.notificationText = notificationText
-        context.scene.state.attachments = attachments
         return context.scene.step.next()
         
     }, 
@@ -192,8 +189,7 @@ const sendNotificationsScene = new StepScene('send-chat-notifications', [
     async (context) => {
         if (context.scene.step.firstTime) {
             const notificationText = context.scene.state.notificationText
-            const attachments = context.scene.state.attachments
-            await adminService.sendChatNotification(notificationText, attachments)
+            await adminService.sendChatNotification(notificationText)
         }
         return await context.scene.leave()
     }
