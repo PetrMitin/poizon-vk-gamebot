@@ -47,7 +47,7 @@ class AdminService {
             const userIds = (await User.findAll()).map(elem => parseInt(elem.dataValues.id))
             return await this.vkInstance.api.messages.send({
                 peer_ids: userIds,
-                random_id: 0,
+                random_id: Math.random(),
                 message: text
             })
         } catch (e) {

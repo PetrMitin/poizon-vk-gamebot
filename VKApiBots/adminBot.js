@@ -65,7 +65,7 @@ adminBot.hear(new RegExp('Удалить админа'), async (context) => {
 adminBot.hear(new RegExp('Уведомление для участников беседы'), async (context) => {
     const isAdmin = await adminService.isAdmin(context.senderId)
     if (!isAdmin) return
-    return await context.scene.enter('send-chat-notifications')
+    return context.scene.enter('send-chat-notifications')
 })
 
 module.exports = adminBot

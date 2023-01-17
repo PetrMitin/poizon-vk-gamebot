@@ -30,7 +30,7 @@ setInterval(async () => {
         if (!topIds.length) return
         return await vkInstance.api.messages.send({
             peer_ids: topIds,
-            random_id: 0,
+            random_id: Math.random(),
             message: 'Поздравляем! За актив в беседе вы получаете обычный ключ! \nЧтобы крутить его, нажмите кнопку "Использовать ключ" на интерактивной клавиатуре в беседе группы'
         })
     }

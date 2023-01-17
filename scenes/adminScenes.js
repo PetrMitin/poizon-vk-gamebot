@@ -161,7 +161,7 @@ const sendNotificationsScene = new StepScene('send-chat-notifications', [
         console.log(context);
         if (context.scene.step.firstTime || !context.text) {
             return context.send('Введи текст рассылки')
-        }  else if (!context.scene.step.firstTime && !context.text) {
+        }  else if (!context.scene.step.firstTime && (!context.text || context.isOutbox)) {
             return
         }
         if (context.isOutbox) return
@@ -175,23 +175,27 @@ const sendNotificationsScene = new StepScene('send-chat-notifications', [
             return context.send('Рассылаем?', {
                 keyboard: yesOrNoKeyboard
             })
-        }  else if (!context.scene.step.firstTime && !context.text) {
+        }  else if (!context.scene.step.firstTime && (!context.text || context.isOutbox)) {
             return
         }
         if (context.isOutbox) return
         const notificationConfirmation = context.messagePayload.command === '/confirm-send'
         if (!notificationConfirmation) {
             await context.send('Отменяем')
-            return await context.scene.leave()
+            return context.scene.leave()
         }
         return context.scene.step.next()
     },
     async (context) => {
+        if (!context.scene.step.firstTime && (!context.text || context.isOutbox)) {
+            return
+        }
         if (context.scene.step.firstTime) {
             const notificationText = context.scene.state.notificationText
             await adminService.sendChatNotification(notificationText)
+            await context.send('Разослано')
         }
-        return await context.scene.leave()
+        return context.scene.leave()
     }
 ])
 
