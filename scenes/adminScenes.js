@@ -158,19 +158,20 @@ const deleteAdminScene = new StepScene('delete-admin', [
 
 const sendNotificationsScene = new StepScene('send-chat-notifications', [
     async (context) => {
+        if (context.isOutbox) return
         console.log(context);
         if (context.scene.step.firstTime || !context.text) {
             return context.send('Введи текст рассылки')
         }  else if (!context.scene.step.firstTime && (!context.text || context.isOutbox)) {
             return
         }
-        if (context.isOutbox) return
         const notificationText = context.text
         context.scene.state.notificationText = notificationText
         return context.scene.step.next()
         
     }, 
     async (context) => {
+        if (context.isOutbox) return
         if (context.scene.step.firstTime || !context.text) {
             return context.send('Рассылаем?', {
                 keyboard: yesOrNoKeyboard
@@ -187,13 +188,14 @@ const sendNotificationsScene = new StepScene('send-chat-notifications', [
         return context.scene.step.next()
     },
     async (context) => {
+        if (context.isOutbox) return
         if (!context.scene.step.firstTime && (!context.text || context.isOutbox)) {
             return
         }
         if (context.scene.step.firstTime) {
             const notificationText = context.scene.state.notificationText
-            await adminService.sendChatNotification(notificationText)
             await context.send('Разослано')
+            await adminService.sendChatNotification(notificationText)
         }
         return context.scene.leave()
     }
